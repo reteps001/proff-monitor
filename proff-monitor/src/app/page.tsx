@@ -3,6 +3,7 @@ import { CompanySearch } from "@/components/company-search"
 import { createClient } from "@/lib/supabase/server"
 import { NotificationsDropdown } from "@/components/notifications-dropdown"
 import { SubscriptionList } from "@/components/subscription-list"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default async function Home() {
   const supabase = await createClient()
@@ -16,6 +17,7 @@ export default async function Home() {
       .from('subscriptions')
       .select(`
             id,
+            sort_order,
             companies (
                 id,
                 name,
@@ -28,6 +30,7 @@ export default async function Home() {
             )
         `)
       .eq('user_id', user.id)
+      .order('sort_order', { ascending: true })
 
     if (error) {
       console.error("Error fetching subscriptions:", error)
@@ -53,6 +56,7 @@ export default async function Home() {
         </div>
 
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           {user ? (
             <>
               <NotificationsDropdown initialNotifications={notifications} />

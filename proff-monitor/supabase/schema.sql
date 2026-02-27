@@ -16,6 +16,7 @@ create table public.subscriptions (
   id uuid not null default gen_random_uuid (),
   user_id uuid not null references auth.users (id) on delete cascade,
   company_id uuid not null references public.companies (id) on delete cascade,
+  sort_order integer not null default 0,
   created_at timestamp with time zone default now(),
   constraint subscriptions_pkey primary key (id),
   constraint subscriptions_user_company_key unique (user_id, company_id)
